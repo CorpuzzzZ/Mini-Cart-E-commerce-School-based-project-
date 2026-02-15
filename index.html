@@ -1,99 +1,79 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Ecommerce</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+<head>
+  <title>Ecommerce</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .product-hidden { display: none !important; }
+    #noResults { display: none; }
+
     <style>
-      .product-hidden {
-        display: none !important;
-      }
-      #noResults {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container-fluid p-0 mb-5">
-      <nav
-        class="navbar navbar-expand-lg shadow-lg bg-body-secondary sticky-top"
-      >
-        <div class="container">
-          <!-- Logo -->
-          <a class="navbar-brand text-success fw-bold" href="#">
-            <img src="image/logo2.png" alt="" style="height: 50px" />
-          </a>
+  @media print {
+    /* Hide everything except receipt content */
+    body > *:not(#receiptModal) {
+      display: none !important;
+    }
+    .modal-backdrop,
+    .modal-header .btn-close {
+      display: none !important;
+    }
+    #receiptModal {
+      display: block !important;
+      position: static !important;
+      width: 100%;
+      height: auto;
+      margin: 0;
+      padding: 0;
+    }
+    #receiptBody {
+      padding: 30px !important;
+      max-width: 800px !important;
+      margin: 0 auto !important;
+      background: white !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
+  </style>
+</head>
+<body>
 
-          <!-- Toggler for mobile -->
-          <button
-            class="navbar-toggler border-0 ms-auto"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
+  <!-- Navbar with search near Home -->
+  <nav class="navbar navbar-expand-lg shadow-lg bg-body-secondary sticky-top">
+    <div class="container">
+      <a class="navbar-brand text-success fw-bold" href="#">
+        <img src="image/logo2.png" alt="" style="height: 50px" />
+      </a>
 
-          <!-- Collapsible content: search bar + nav links -->
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Search bar – placed near Home tab -->
-            <form
-              class="d-flex ms-lg-4 my-2 my-lg-0"
-              role="search"
-              id="searchForm"
-            >
-              <div class="input-group" style="max-width: 420px">
-                <input
-                  type="search"
-                  id="searchInput"
-                  class="form-control border-success-subtle rounded-start-pill"
-                  placeholder="Search products..."
-                  aria-label="Search"
-                />
-                <button
-                  class="btn btn-success rounded-end-pill px-4"
-                  type="submit"
-                >
-                  <i class="bi bi-search"></i>
-                </button>
-              </div>
-            </form>
+      <button class="navbar-toggler border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <!-- Navigation links + cart icon -->
-            <ul
-              class="navbar-nav ms-auto d-flex gap-4 flex-row align-items-center"
-            >
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#Shop">Shop</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#Blog">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#About">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#Contact">Contact</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-success" href="#" id="navbarCartLink">
-                  <i class="bi bi-cart-fill fs-4"></i>
-                </a>
-              </li>
-            </ul>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <form class="d-flex ms-lg-4 my-2 my-lg-0" role="search" id="searchForm">
+          <div class="input-group" style="max-width: 420px;">
+            <input type="search" id="searchInput" class="form-control border-success-subtle rounded-start-pill" placeholder="Search products..." aria-label="Search" />
+            <button class="btn btn-success rounded-end-pill px-4" type="submit"><i class="bi bi-search"></i></button>
           </div>
-        </div>
-      </nav>
+        </form>
+
+        <ul class="navbar-nav ms-auto d-flex gap-4 flex-row align-items-center">
+          <li class="nav-item"><a class="nav-link text-success" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-success" href="#Shop">Shop</a></li>
+          <li class="nav-item"><a class="nav-link text-success" href="#Blog">Blog</a></li>
+          <li class="nav-item"><a class="nav-link text-success" href="#About">About</a></li>
+          <li class="nav-item"><a class="nav-link text-success" href="#Contact">Contact</a></li>
+          <li class="nav-item">
+            <a class="nav-link text-success" href="#" id="navbarCartLink">
+              <i class="bi bi-cart-fill fs-4"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
       <div class="container-fluid p-0">
         <div id="carouselExampleIndicators" class="carousel slide">
@@ -903,248 +883,213 @@
     </div>
 
     <!-- Cart Offcanvas -->
-    <div
-      class="offcanvas offcanvas-end"
-      tabindex="-1"
-      id="cartOffcanvas"
-      aria-labelledby="cartOffcanvasLabel"
-    >
-      <div class="offcanvas-header border-bottom border-success-subtle">
-        <h5
-          class="offcanvas-title fw-bold text-success"
-          id="cartOffcanvasLabel"
-        >
-          <i class="bi bi-cart-fill me-2"></i> Shopping Cart
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-        ></button>
-      </div>
-      <div class="offcanvas-body d-flex flex-column p-4">
-        <div id="cartItemsContainer" class="flex-grow-1 mb-4"></div>
-        <div class="border-top border-success-subtle pt-4 mt-auto">
-          <div class="d-flex justify-content-between text-secondary mb-2">
-            <span>Subtotal</span><span id="subtotal">₱0.00</span>
-          </div>
-          <div class="d-flex justify-content-between text-danger mb-2">
-            <span>Discount</span><span id="discount">-₱0.00</span>
-          </div>
-          <div class="d-flex justify-content-between text-secondary mb-2">
-            <span>Tax (12%)</span><span id="tax">₱0.00</span>
-          </div>
-          <div class="d-flex justify-content-between text-secondary mb-3">
-            <span>Shipping</span><span id="shipping">₱0.00</span>
-          </div>
-          <hr class="border-success-subtle" />
-          <div class="d-flex justify-content-between fw-bold fs-5 text-dark">
-            <span>Total</span><span id="grandTotal">₱0.00</span>
-          </div>
-          <button
-            class="btn btn-success w-100 mt-4 py-3 fw-bold rounded-4 shadow-sm"
-            id="proceedCheckoutBtn"
-            disabled
-          >
-            PROCEED TO CHECKOUT
-          </button>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header border-bottom border-success-subtle">
+      <h5 class="offcanvas-title fw-bold text-success" id="cartOffcanvasLabel">
+        <i class="bi bi-cart-fill me-2"></i> Shopping Cart
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-4">
+      <div id="cartItemsContainer" class="flex-grow-1 mb-4"></div>
+
+      <div class="border-top border-success-subtle pt-4 mt-auto">
+        <div class="d-flex justify-content-between text-secondary mb-2"><span>Subtotal</span><span id="subtotal">₱0.00</span></div>
+        <div class="d-flex justify-content-between text-danger mb-2"><span>Discount</span><span id="discount">-₱0.00</span></div>
+        <div class="d-flex justify-content-between text-secondary mb-2"><span>Tax (12%)</span><span id="tax">₱0.00</span></div>
+        <div class="d-flex justify-content-between text-secondary mb-3"><span>Shipping</span><span id="shipping">₱0.00</span></div>
+        <hr class="border-success-subtle" />
+        <div class="d-flex justify-content-between fw-bold fs-5 text-dark">
+          <span>Total</span><span id="grandTotal">₱0.00</span>
         </div>
+
+        <button class="btn btn-success w-100 mt-4 py-3 fw-bold rounded-4 shadow-sm" 
+                id="proceedCheckoutBtn" 
+                data-bs-toggle="modal" 
+                data-bs-target="#checkoutModal"
+                disabled>
+          PROCEED TO CHECKOUT
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- Checkout Modal -->
-    <div
-      class="modal fade"
-      id="checkoutModal"
-      tabindex="-1"
-      aria-labelledby="checkoutModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-4 shadow border-0">
-          <div class="modal-header border-0 pb-0">
-            <h5
-              class="modal-title fw-bold text-success"
-              id="checkoutModalLabel"
-            >
-              Checkout
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body px-5 pb-5">
-            <form id="checkoutForm" novalidate>
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary"
-                    >Full Name</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control rounded-3"
-                    name="fullName"
-                    required
-                  />
-                  <div class="invalid-feedback">Required field</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-bold text-secondary">Email</label>
-                  <input
-                    type="email"
-                    class="form-control rounded-3"
-                    name="email"
-                    required
-                  />
-                  <div class="invalid-feedback">Please enter a valid email</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-bold text-secondary"
-                    >Payment Method</label
-                  >
-                  <select class="form-select rounded-3" name="payment" required>
-                    <option value="" disabled selected>
-                      Choose payment method
-                    </option>
-                    <option value="Cash">Cash on Delivery</option>
-                    <option value="GCash">GCash</option>
-                    <option value="Card">Credit / Debit Card</option>
-                  </select>
-                  <div class="invalid-feedback">Required</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-bold text-secondary d-block mb-3"
-                    >Delivery Option</label
-                  >
-                  <div class="d-flex gap-5">
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="delivery"
-                        id="pickup"
-                        value="Pickup"
-                        required
-                      />
-                      <label class="form-check-label" for="pickup"
-                        >Store Pickup</label
-                      >
-                    </div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="delivery"
-                        id="home"
-                        value="Delivery"
-                      />
-                      <label class="form-check-label" for="home"
-                        >Home Delivery</label
-                      >
-                    </div>
-                  </div>
-                  <div class="invalid-feedback d-block mt-2">
-                    Please select one
-                  </div>
-                </div>
-                <div
-                  class="col-12"
-                  id="deliveryAddressGroup"
-                  style="display: none"
-                >
-                  <label class="form-label fw-bold text-secondary"
-                    >Complete Delivery Address</label
-                  >
-                  <textarea
-                    class="form-control rounded-3"
-                    name="address"
-                    rows="3"
-                    placeholder="Unit / House #, Street, Barangay, City, Province..."
-                  ></textarea>
-                </div>
+  <!-- Checkout Modal -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content rounded-4 shadow border-0">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold text-success" id="checkoutModalLabel">Checkout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body px-5 pb-5">
+          <form id="checkoutForm" novalidate>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary">Full Name</label>
+                <input type="text" class="form-control rounded-3" name="fullName" required />
+                <div class="invalid-feedback">Required field</div>
               </div>
-              <button
-                type="submit"
-                class="btn btn-success w-100 mt-5 py-3 fw-bold rounded-4 shadow-sm"
-              >
-                PLACE ORDER
-              </button>
-            </form>
-          </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary">Email</label>
+                <input type="email" class="form-control rounded-3" name="email" required />
+                <div class="invalid-feedback">Please enter a valid email</div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-bold text-secondary">Payment Method</label>
+                <select class="form-select rounded-3" name="payment" required>
+                  <option value="" disabled selected>Choose payment method</option>
+                  <option value="Cash">Cash on Delivery</option>
+                  <option value="GCash">GCash</option>
+                  <option value="Card">Credit / Debit Card</option>
+                </select>
+                <div class="invalid-feedback">Required</div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-bold text-secondary d-block mb-3">Delivery Option</label>
+                <div class="d-flex gap-5">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="delivery" id="pickup" value="Pickup" required />
+                    <label class="form-check-label" for="pickup">Store Pickup</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="delivery" id="home" value="Delivery" />
+                    <label class="form-check-label" for="home">Home Delivery</label>
+                  </div>
+                </div>
+                <div class="invalid-feedback d-block mt-2">Please select one</div>
+              </div>
+
+              <div class="col-12" id="deliveryAddressGroup" style="display:none;">
+                <label class="form-label fw-bold text-secondary">Complete Delivery Address</label>
+                <textarea class="form-control rounded-3" name="address" rows="3" placeholder="Unit / House #, Street, Barangay, City, Province..."></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mt-5 py-3 fw-bold rounded-4 shadow-sm">
+              PLACE ORDER
+            </button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Receipt Modal -->
-    <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-          <div class="modal-header bg-success text-white rounded-top-4">
-            <h5 class="modal-title fw-bold">Order Confirmed</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body p-5" id="receiptBody"></div>
-          <div class="modal-footer border-0">
-            <button
-              type="button"
-              class="btn btn-outline-secondary rounded-3 px-4"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-success rounded-3 px-4"
-              onclick="window.print()"
-            >
-              Print Receipt
-            </button>
-          </div>
+  <!-- Receipt Modal -->
+  <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header bg-success text-white rounded-top-4">
+          <h5 class="modal-title fw-bold">Order Receipt</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body p-4 p-md-5" id="receiptBody" style="font-size: 0.95rem;">
+          <!-- Filled dynamically -->
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">Close</button>
+<button 
+  type="button" 
+  class="btn btn-success rounded-3 px-4" 
+  onclick="printReceiptOnly()"
+>
+  Print Receipt
+</button>     
+</div>
       </div>
     </div>
+  </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+  <!-- Your script.js file -->
+  <script src="script.js"></script>
 
-    <!-- Real-time search functionality -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const searchInput = document.getElementById("searchInput");
-        const productCards = document.querySelectorAll(".product-card");
-        const noResults = document.getElementById("noResults");
+  <!-- Search functionality -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      const productCards = document.querySelectorAll('.product-card');
+      const noResults = document.getElementById('noResults');
 
-        searchInput.addEventListener("input", () => {
-          const query = searchInput.value.toLowerCase().trim();
-          let visibleCount = 0;
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
 
-          productCards.forEach((card) => {
-            const name = card.getAttribute("data-name")?.toLowerCase() || "";
-            if (name.includes(query)) {
-              card.classList.remove("product-hidden");
-              visibleCount++;
-            } else {
-              card.classList.add("product-hidden");
-            }
-          });
-
-          noResults.style.display =
-            visibleCount === 0 && query !== "" ? "block" : "none";
+        productCards.forEach(card => {
+          const name = card.getAttribute('data-name')?.toLowerCase() || '';
+          if (name.includes(query)) {
+            card.classList.remove('product-hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('product-hidden');
+          }
         });
 
-        // Prevent form submit from refreshing the page
-        document
-          .getElementById("searchForm")
-          .addEventListener("submit", (e) => {
-            e.preventDefault();
-          });
+        noResults.style.display = (visibleCount === 0 && query !== '') ? 'block' : 'none';
       });
-    </script>
-  </body>
+
+      document.getElementById('searchForm').addEventListener('submit', e => e.preventDefault());
+    });
+  </script>
+
+  <!-- Print only receipt + redirect to home after print -->
+  <script>
+  function printReceiptOnly() {
+    // 1. Remember current scroll position
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+
+    // 2. Hide everything except receipt content
+    const elementsToHide = document.querySelectorAll('body > *:not(#receiptModal):not(#receiptModal *)');
+    elementsToHide.forEach(el => el.style.display = 'none');
+
+    // 3. Make receipt look good for printing
+    const receiptModal = document.getElementById('receiptModal');
+    const receiptBody = document.getElementById('receiptBody');
+    receiptModal.style.display = 'block';
+    receiptBody.style.padding = '30px';
+    receiptBody.style.maxWidth = '800px';
+    receiptBody.style.margin = '20px auto';
+
+    // 4. Trigger print
+    window.print();
+
+    // 5. Immediately restore (no waiting for onafterprint)
+    setTimeout(() => {
+      elementsToHide.forEach(el => el.style.display = '');
+      receiptModal.style.display = '';
+      receiptBody.style.padding = '';
+      receiptBody.style.maxWidth = '';
+      receiptBody.style.margin = '';
+
+      // Restore exact scroll position
+      window.scrollTo(scrollX, scrollY);
+    }, 100); // very short delay to let print dialog open first
+  }
+</script>
+
+  <!-- Close receipt modal → scroll to home -->
+  <script>
+    document.getElementById('receiptModal').addEventListener('hidden.bs.modal', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
+  <script>
+  function printReceiptOnly() {
+    // Optional: add a class to body for extra print safety (if needed)
+    document.body.classList.add('printing-receipt');
+
+    // Trigger print – CSS media query will handle hiding
+    window.print();
+
+    // Remove class after print (fallback)
+    setTimeout(() => {
+      document.body.classList.remove('printing-receipt');
+    }, 500);
+  }
+</script>
+
+</body>
 </html>

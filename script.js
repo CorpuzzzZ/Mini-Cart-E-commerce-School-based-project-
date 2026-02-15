@@ -1,4 +1,4 @@
-// script.js - Final version with toast + View Cart button
+// script.js - Final version
 
 let cart = [];
 
@@ -34,7 +34,7 @@ const products = [
   { id: 8, name: "The Voyager Boot", price: 500, img: "image/Shoes 1.png" },
 ];
 
-// Format price
+// Format currency
 function peso(amount) {
   return (
     "₱" +
@@ -80,7 +80,7 @@ function showAddedToast(name) {
 
   container.insertAdjacentHTML("beforeend", toastHtml);
   const toastEl = document.getElementById(toastId);
-  const toast = new bootstrap.Toast(toastEl, { delay: 5000 }); // longer so user can click
+  const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
   toast.show();
 
   toastEl.addEventListener("hidden.bs.toast", () => toastEl.remove());
@@ -102,20 +102,16 @@ function renderCart() {
     let html = "";
     cart.forEach((item) => {
       html += `
-        <div class="d-flex align-items-center mb-4 pb-3 border-bottom position-relative">
-          <img src="${item.img}" alt="${item.name}" 
-               style="width:70px;height:70px;object-fit:cover;" 
-               class="rounded-3 me-3 shadow-sm">
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+          <img src="${item.img}" alt="${item.name}" style="width:70px;height:70px;object-fit:cover;" class="rounded-3 me-3 shadow-sm">
           <div class="flex-grow-1">
             <div class="fw-bold text-dark">${item.name}</div>
             <div class="text-success small">${peso(item.price)}</div>
           </div>
-          <div class="d-flex align-items-center gap-2 me-4">
-            <button class="btn btn-sm btn-outline-secondary rounded-circle" 
-                    onclick="changeQty(${item.id}, -1)">−</button>
+          <div class="d-flex align-items-center gap-2 me-3">
+            <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="changeQty(${item.id}, -1)">−</button>
             <span class="px-3 fw-bold">${item.qty}</span>
-            <button class="btn btn-sm btn-outline-secondary rounded-circle" 
-                    onclick="changeQty(${item.id}, 1)">+</button>
+            <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="changeQty(${item.id}, 1)">+</button>
           </div>
           <div class="text-end fw-bold text-success" style="min-width:80px;">
             ${peso(item.price * item.qty)}
@@ -129,7 +125,7 @@ function renderCart() {
   updateTotals();
 }
 
-// Quantity change – remove item if qty <= 0
+// Change quantity – remove item if <= 0
 function changeQty(id, delta) {
   const idx = cart.findIndex((i) => i.id === id);
   if (idx === -1) return;
@@ -145,7 +141,7 @@ function changeQty(id, delta) {
   renderCart();
 }
 
-// Add to cart – show toast, do NOT open cart
+// Add item to cart (only from cart icon)
 function addToCart(id) {
   const prod = getProduct(id);
   if (!prod) return;
@@ -158,10 +154,10 @@ function addToCart(id) {
   }
 
   showAddedToast(prod.name);
-  renderCart(); // update totals & UI but don't open panel
+  renderCart();
 }
 
-// Update totals – shipping shown when cart has items
+// Update totals – shipping if cart has items
 function updateTotals() {
   let subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
@@ -169,7 +165,6 @@ function updateTotals() {
   let afterDiscount = subtotal - discount;
   let tax = Math.round(afterDiscount * 0.12);
 
-  // Shipping: always shown if cart has items; free above ₱1500
   let shipping = cart.length > 0 ? (subtotal >= 1500 ? 0 : 150) : 0;
 
   let grandTotal = afterDiscount + tax + shipping;
@@ -181,91 +176,127 @@ function updateTotals() {
   document.getElementById("grandTotal").textContent = peso(grandTotal);
 }
 
-// Delivery toggle
+// Delivery address toggle
 document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
   radio.addEventListener("change", () => {
-    const show =
+    const isDelivery =
       document.querySelector('input[name="delivery"]:checked')?.value ===
       "Delivery";
-    document.getElementById("deliveryAddressGroup").style.display = show
+    document.getElementById("deliveryAddressGroup").style.display = isDelivery
       ? "block"
       : "none";
-    document.querySelector('textarea[name="address"]').required = show;
+    document.querySelector('textarea[name="address"]').required = isDelivery;
   });
 });
 
-// Checkout submission
-document.getElementById("checkoutForm")?.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const form = e.target;
-  if (!form.checkValidity()) {
-    form.classList.add("was-validated");
-    return;
-  }
+// Place Order → generate receipt
+document
+  .getElementById("checkoutForm")
+  ?.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  const data = new FormData(form);
-  const orderId = "ORD-" + Date.now().toString().slice(-6);
+    const form = e.target;
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
 
-  let itemsHtml = cart
-    .map(
-      (i) => `
+    const data = new FormData(form);
+    const orderId = "ORD-" + Date.now().toString().slice(-6);
+    const orderDate = new Date().toLocaleString("en-PH");
+
+    let itemsHtml = cart
+      .map(
+        (item) => `
     <tr>
-      <td>${i.name}</td>
-      <td class="text-end">${i.qty}</td>
-      <td class="text-end">${peso(i.price)}</td>
-      <td class="text-end fw-bold">${peso(i.price * i.qty)}</td>
+      <td>${item.name}</td>
+      <td class="text-end">${item.qty}</td>
+      <td class="text-end">${peso(item.price)}</td>
+      <td class="text-end fw-bold">${peso(item.price * item.qty)}</td>
     </tr>
   `,
-    )
-    .join("");
+      )
+      .join("");
 
-  document.getElementById("receiptBody").innerHTML = `
-    <div class="text-center mb-5">
+    document.getElementById("receiptBody").innerHTML = `
+    <div class="text-center mb-4">
       <h4 class="text-success fw-bold">Order #${orderId}</h4>
-      <p class="text-muted">${new Date().toLocaleString("en-PH")}</p>
+      <p class="text-muted small">${orderDate}</p>
     </div>
+
     <div class="mb-4">
-      <strong>Customer:</strong><br>${data.get("fullName")}<br>${data.get("email")}<br>
-      <strong>Payment:</strong> ${data.get("payment")}<br>
-      <strong>Delivery:</strong> ${data.get("delivery")}${data.get("address") ? ` – ${data.get("address")}` : ""}
+      <strong>Customer:</strong><br>
+      ${data.get("fullName")}<br>
+      ${data.get("email")}<br><br>
+      <strong>Payment Method:</strong> ${data.get("payment")}<br>
+      <strong>Delivery:</strong> ${data.get("delivery")}
+      ${data.get("address") ? `<br><strong>Address:</strong> ${data.get("address")}` : ""}
     </div>
-    <table class="table table-borderless table-sm">
+
+    <h6 class="mb-2">Order Items</h6>
+    <table class="table table-sm table-borderless">
       <thead class="border-bottom">
-        <tr><th>Item</th><th class="text-end">Qty</th><th class="text-end">Price</th><th class="text-end">Total</th></tr>
+        <tr>
+          <th>Item</th>
+          <th class="text-end">Qty</th>
+          <th class="text-end">Unit Price</th>
+          <th class="text-end">Total</th>
+        </tr>
       </thead>
       <tbody>${itemsHtml}</tbody>
     </table>
-    <hr>
-    <div class="d-flex justify-content-between fw-bold fs-5">
-      <span>Grand Total</span><span>${document.getElementById("grandTotal").textContent}</span>
+
+    <hr class="my-4">
+
+    <table class="table table-borderless w-100">
+      <tr><td>Subtotal:</td><td class="text-end">${document.getElementById("subtotal").textContent}</td></tr>
+      <tr><td>Discount:</td><td class="text-end text-danger">${document.getElementById("discount").textContent}</td></tr>
+      <tr><td>Tax (12%):</td><td class="text-end">${document.getElementById("tax").textContent}</td></tr>
+      <tr><td>Shipping:</td><td class="text-end">${document.getElementById("shipping").textContent}</td></tr>
+      <tr class="fw-bold fs-5 border-top">
+        <td>Grand Total:</td>
+        <td class="text-end">${document.getElementById("grandTotal").textContent}</td>
+      </tr>
+    </table>
+
+    <div class="text-center mt-5 text-muted small">
+      Thank you for shopping with us!
     </div>
-    <p class="text-center text-muted mt-5 small">Thank you for shopping with us ♡</p>
   `;
 
-  new bootstrap.Modal(document.getElementById("receiptModal")).show();
+    // Show receipt modal
+    const receiptModal = new bootstrap.Modal(
+      document.getElementById("receiptModal"),
+    );
+    receiptModal.show();
 
-  cart = [];
-  renderCart();
-  form.reset();
-  document.getElementById("deliveryAddressGroup").style.display = "none";
-  bootstrap.Modal.getInstance(document.getElementById("checkoutModal"))?.hide();
-});
+    // Reset
+    cart = [];
+    renderCart();
+    form.reset();
+    document.getElementById("deliveryAddressGroup").style.display = "none";
+    bootstrap.Modal.getInstance(
+      document.getElementById("checkoutModal"),
+    )?.hide();
+  });
 
-// Product add buttons
+// Connect cart icons (only way to add items)
 document.querySelectorAll('.card a[href="#"]').forEach((link) => {
-  link.addEventListener("click", (e) => {
+  link.addEventListener("click", function (e) {
     e.preventDefault();
-    const card = link.closest(".card");
+    const card = this.closest(".card");
     const id = parseInt(card.getAttribute("data-id"));
     if (id) addToCart(id);
   });
 });
 
-// Navbar cart → open cart
-document.getElementById("navbarCartLink")?.addEventListener("click", (e) => {
-  e.preventDefault();
-  new bootstrap.Offcanvas(document.getElementById("cartOffcanvas")).show();
-});
+// Navbar cart icon → open cart
+document
+  .getElementById("navbarCartLink")
+  ?.addEventListener("click", function (e) {
+    e.preventDefault();
+    new bootstrap.Offcanvas(document.getElementById("cartOffcanvas")).show();
+  });
 
 // Initial render
 renderCart();
