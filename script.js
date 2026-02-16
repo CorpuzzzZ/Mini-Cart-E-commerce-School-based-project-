@@ -125,7 +125,7 @@ function renderCart() {
   updateTotals();
 }
 
-// Change quantity – remove item if <= 0
+// Change quantity
 function changeQty(id, delta) {
   const idx = cart.findIndex((i) => i.id === id);
   if (idx === -1) return;
@@ -141,7 +141,7 @@ function changeQty(id, delta) {
   renderCart();
 }
 
-// Add item to cart (only from cart icon)
+// Add item to cart
 function addToCart(id) {
   const prod = getProduct(id);
   if (!prod) return;
@@ -157,7 +157,7 @@ function addToCart(id) {
   renderCart();
 }
 
-// Update totals – shipping if cart has items
+// Update totals
 function updateTotals() {
   let subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
@@ -280,7 +280,7 @@ document
     )?.hide();
   });
 
-// Connect cart icons (only way to add items)
+// Connect cart icons
 document.querySelectorAll('.card a[href="#"]').forEach((link) => {
   link.addEventListener("click", function (e) {
     e.preventDefault();
@@ -290,7 +290,6 @@ document.querySelectorAll('.card a[href="#"]').forEach((link) => {
   });
 });
 
-// Navbar cart icon → open cart
 document
   .getElementById("navbarCartLink")
   ?.addEventListener("click", function (e) {
@@ -298,5 +297,4 @@ document
     new bootstrap.Offcanvas(document.getElementById("cartOffcanvas")).show();
   });
 
-// Initial render
 renderCart();

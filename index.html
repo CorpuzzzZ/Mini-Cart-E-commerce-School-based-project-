@@ -652,7 +652,6 @@
           </div>
         </div>
 
-        <!-- No results message -->
         <div id="noResults" class="text-center py-5 text-secondary fs-5">
           <i class="bi bi-search fs-1"></i><br />
           No products found matching your search.
@@ -903,12 +902,20 @@
           <span>Total</span><span id="grandTotal">₱0.00</span>
         </div>
 
+        <!-- Proceed to Checkout -->
         <button class="btn btn-success w-100 mt-4 py-3 fw-bold rounded-4 shadow-sm" 
                 id="proceedCheckoutBtn" 
                 data-bs-toggle="modal" 
                 data-bs-target="#checkoutModal"
                 disabled>
           PROCEED TO CHECKOUT
+        </button>
+
+        <!-- Clear Cart button – new! -->
+        <button class="btn btn-outline-danger w-100 mt-2 py-2 fw-bold" 
+                id="clearCartBtn" 
+                style="display: none;">
+          Clear Cart
         </button>
       </div>
     </div>
@@ -1090,6 +1097,27 @@
     }, 500);
   }
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const clearBtn = document.getElementById('clearCartBtn');
+
+      // Show/hide Clear Cart button based on cart state
+      const observer = new MutationObserver(() => {
+        clearBtn.style.display = cart.length > 0 ? 'block' : 'none';
+      });
+
+      observer.observe(document.getElementById('cartItemsContainer'), { childList: true, subtree: true });
+
+      // Clear Cart functionality
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear your cart?')) {
+          cart = [];
+          renderCart();
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
